@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 图解 TCP:IP · senyu's blog</title><meta name="description" content="图解 TCP:IP - senyu"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="senyu's blog"><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="senyu's blog" type="application/atom+xml">
+</head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">图解 TCP:IP</h1><div class="post-info">Nov 14, 2019</div><div class="post-content"><h3 id="网络基础知识"><a href="#网络基础知识" class="headerlink" title="网络基础知识"></a>网络基础知识</h3><ol>
+<li><p>网络构成的要素：</p>
+<ul>
+<li><strong>网卡</strong>：使计算机连网</li>
+<li><strong>中继器</strong>：从物理层上延长网络</li>
+<li><strong>网桥（2层交换机）</strong>：从数据链路层上延长网络</li>
+<li><strong>路由器（3层交换机）</strong>：通过网络层转发分组数据</li>
+<li><strong>4～7层交换机</strong>：处理传输层以上各层网络传输</li>
+<li><strong>网关</strong>：转换协议</li>
+</ul>
+</li>
+<li><p>OSI 各个分层的主要作用：</p>
+<ul>
+<li><strong>应用层</strong>：为应用程序提供服务并规定应用程序中通信相关的细节。</li>
+<li><strong>表示层</strong>：将设备固有的数据格式转换为网络标准传输格式。</li>
+<li><strong>会话层</strong>：负责建立和断开通信连接，以及数据分割等传输相关的管理。</li>
+<li><strong>传输层</strong>：在通信双方的节点上进行可靠传输。</li>
+<li><strong>网络层</strong>：将数据传输到目标地址，主要负责寻址和路由选择。</li>
+<li><strong>数据链路层</strong>：物理层面上互连的节点之间通信传输。</li>
+<li><strong>物理层</strong>：负责比特流于电压高低、光的闪灭之间的转换。</li>
+</ul>
+</li>
+<li><p>传输方式的分类</p>
+<ul>
+<li><strong>面向有连接型</strong>：ATM、帧中继、TCP</li>
+<li><strong>面向无连接型</strong>：以太网、IP、UDP</li>
+</ul>
+</li>
+<li><p>地址</p>
+<ul>
+<li><p>在同一通信网络中不允许有两个相同地址的通信主体存在</p>
+</li>
+<li><p>MAC 地址和 IP 地址都具有唯一性，但是只有 IP 地址具有层次性。MAC 地址是真正负责最终通信的地址，但实际寻址中，IP 地址必不可少。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="TCP-IP基础知识"><a href="#TCP-IP基础知识" class="headerlink" title="TCP/IP基础知识"></a>TCP/IP基础知识</h3><ol>
+<li>传输中数据包，一部分由协议所要用到的首部，另一部分是上层传过来的数据，每个包首部包含两个信息：一个是发送端和接收端地址，另一个是上一层的协议类型。<ul>
+<li><strong>TCP首部</strong>：源端口号、目标端口号、序号、以及校验和</li>
+<li><strong>IP首部</strong>：接收端 IP 地址以及发送端 IP 地址</li>
+<li><strong>以太网首部</strong>：接收端 MAC 地址、发送端 MAC 地址以及标志以太网类型的以太网数据的协议</li>
+</ul>
+</li>
+</ol>
+<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3><ol>
+<li>以太网前端有一个前导码，表示一个以太网帧的开始，也是对端网卡能够确保与其同步的标志。前导码末尾有个SFD的域，它的值是“11”，前导码与 SFD 合起来占8个字节。</li>
+<li>常见数据链路：以太网、802.11、蓝牙、PPP（Point-to-point Protocol）、ATM（Asynchronous Transfer Mode）、FDDI（Fiber Distributed Data Interface）、光线通道等。</li>
+<li>不同数据链路的最大区别在于各自的最大传输单位（MTU）不同。</li>
+</ol>
+<h3 id="IP-协议"><a href="#IP-协议" class="headerlink" title="IP 协议"></a>IP 协议</h3><ol>
+<li>IP 地址由 “网络标识“ 和 ”主机标识” 两部分组成。</li>
+<li>IP 地址的分类：<ol>
+<li><strong>A类地址</strong>：首位为“0”，从第 1 位到第 8 位是它的网络标识，后 24 位为主机标识，十进制表示位：0.0.0.0~127.0.0.0。</li>
+<li><strong>B类地址</strong>：首位为“10”，从第 1 位到第 16 位是它的网络标识，后 16 位为主机标识，十进制表示位：128.0.0.0~191.255.0.0。</li>
+<li><strong>C类地址</strong>：首位为“110”，从第 1 位到第 24 位是它的网络标识，后 8 位为主机标识，十进制表示位：192.0.0.0~223.255.255.0。</li>
+<li><strong>D类地址</strong>：首位为“1110”，从第 1 位到第 32 位都是它的网络标识，没有主机标识，常用于多播，十进制表示位：224.0.0.0~239.255.255.255。</li>
+</ol>
+</li>
+<li>广播地址：主机部分全部设置为1。</li>
+<li>子网：将原来的A类、B类、C类等分类中的主机地址部分用作子网地址，可以将原网络分为多个物理网络的一种机制。对应网络标识部分全为1，主机标识部分全为0。</li>
+<li>IPv6 地址的长度是原来的 4 倍，128 比特。</li>
+</ol>
+<h3 id="IP-协议相关技术"><a href="#IP-协议相关技术" class="headerlink" title="IP 协议相关技术"></a>IP 协议相关技术</h3><ol>
+<li><p>DNS 查询流程：</p>
+<ol>
+<li>向 DNS 服务器查询 IP 地址；</li>
+<li>DNS 服务器在自己的数据库查找，如果找不到就向上层根域名服务器请求查询，从根开始对域名树按照顺序进行遍历，知道找到制定的域名服务器；</li>
+<li>上层域名服务器返回域名的 IP 地址给客户端；</li>
+</ol>
+</li>
+<li><p>ARP 工作机制：通过广播发送一个 ARP 请求包，包含目标主机的 IP 地址，由于广播的包可以被同一个链路所有主机和路由器进行解析，因此目标主机也会对此请求包进行解析，如果 ARP 请求包中的目标地址和自己的 IP 地址一致，那么这个节点就将自己的 MAC 地址塞入 ARP 响应包中返回。</p>
+</li>
+<li><p>ICMP 主要功能包括，确认 IP 包是否成功送达目标地址，通知在发送过程中 IP 包被废弃的具体原因，改善网络设置等。</p>
+</li>
+<li><p>在网络层的首部后面继续追加网络层首部的通信方法叫做“IP 隧道”。</p>
+</li>
+<li><p>Mobile IP 技术让主机在所连接的子网 IP 发生变化时，主机的 IP 地址仍保持不变，通信能够继续。</p>
+</li>
+<li><p>DNS 解析过程：</p>
+<ol>
+<li>主机向本地域名服务器发起域名查询；</li>
+<li>本地域名服务器不知道本查询的域名的 IP 地址，于是向根域名服务器发出查询请求报文；</li>
+<li>根域名服务器返回顶级域名服务器的 IP 地址，本地域名服务器再向顶级域名服务器查询；</li>
+<li>顶级域名服务器返回查询的 IP 地址，或者告知下一步应当向哪一个权限域名服务器进行查询；</li>
+<li>本地域名服务器最终获得 IP 地址或者是出错的结果，返回给主机；</li>
+</ol>
+</li>
+<li><p>ARP 工作流程：</p>
+<p>主机 A 想要获取 主机 B 的 MAC 地址。</p>
+<ol>
+<li>主机 A 通过广播发送一个 ARP 请求包；</li>
+<li>请求包被同一链路上所有主机或路由解析；</li>
+<li>主机 B 解析请求包时发现目标 IP 地址与自己的 IP 一致，将自己的 MAC 地址塞入 ARP 响应包返回。</li>
+</ol>
+</li>
+<li><p>NAT 的工作原理：</p>
+<p>简单地说，NAT 就是在局域网内部网络中使用内部地址，而当内部节点要与外部网络进行通讯时，就在网关处，将内部地址替换成公用地址，从而在外部公网上正常使用。NAT 可被集成在路由器中，在其内部有一张自动生成的用来转换地址的表。</p>
+</li>
+</ol>
+<h3 id="TCP-相关知识点"><a href="#TCP-相关知识点" class="headerlink" title="TCP 相关知识点"></a>TCP 相关知识点</h3><ol>
+<li><p>TCP 通过序列号和确认应答（ACK）提高可靠性。</p>
+<ul>
+<li>发送端将数据发出后会等待对端的确认应答，如果一定时间内没有等到确认应答，发送端就可以认为数据已经丢失，并进行重发。</li>
+<li>未收到确认应答可能是数据对方已经收到，只是返回的确认应答在途中丢失。这种情况会进行重发，目标主机会收到重复的数据，因此通过序列号标记一段数据，接收端查询接收数据 TCP 首部的序列号和数据长度，将自己的下一步应该接受的序号作为确认应答返送回去，实现可靠传输。</li>
+<li>重发超时的确定。TCP 每次发包时都会计算往返时间（RTT）及其波动的偏差，将往返时间和偏差相加，重发超时的时间就是比这个总和稍大一点的值。</li>
+<li>重发到了一定次数，如果没有任何确认应答返回，就会判断为网络或对端主机发生异常，强制关闭连接。</li>
+</ul>
+</li>
+<li><p>TCP 利用窗口控制提高速度</p>
+<ul>
+<li>发送端主机在发送了一个段以后，不会一直等待确认应答，而是继续发送，从而缩短转发时间。</li>
+<li>窗口大小指无需等待确认应答而可以继续发送数据的最大值。</li>
+<li>如果窗口中部分数据出现丢包，发送端会设置缓存保留这些数据，直到收到他们的确认应答。</li>
+<li><strong>窗口控制</strong>：窗口在一定程度较大时，即使有少部分的确认应答丢失也不会进行重发，可以通过下一个确认应答来确认。</li>
+<li><strong>高速重发控制</strong>（<strong>快重传</strong>）：在窗口比较大，又出现报文段丢失的情况下，接收端没有收到自己期望序号的数据时，会对之前收到的数据进行确认应答，发送端主机如果连续 3 次收到同一个确认应答，就会将对应数据进行重发。其他数据发送数据放入队列，待重传结束后再正常传输。</li>
+<li><strong>流控制</strong>：TCP 首部有个字段用来通知窗口大小，接收主机将自己可以接受的缓冲区大小放入字段中通知发送端。</li>
+<li>接收端缓冲区快满了，会暂停接收数据，直到发出一个更新通知后通信才得以继续。</li>
+<li>如果更新通知丢失了，过了重发超时的时间以后，发送端会时不时发送窗口探测的数据段，仅含一个字节以获取最新的窗口大小，从而保证通信能继续。</li>
+</ul>
+</li>
+<li><p>拥塞控制</p>
+<ul>
+<li>TCP 为了防止通信开始时就发送大量数据，使用了一种慢启动的算法，通过拥塞窗口（cwnd）调节数据发送量。</li>
+<li><strong>慢启动</strong>时，将拥塞窗口大小设置为 1 MSS，之后每收到一次确认应答（ACK），拥塞窗口的值就加 1。</li>
+<li>发送数据包时，将拥塞窗口的大小与接收端主机通知的窗口大小做比较，取较小值作为最大发送量。</li>
+<li>为防止每次包的往后拥塞窗口以指数函数增长，引入慢启动阈值（ssthresh）。<ol>
+<li><strong>拥塞避免</strong>：当窗口指数增大导致<strong>超时重发</strong>时，就会设置阈值为当前拥塞窗口的一半，窗口重新设置为 1。当窗口再次增大到超出这个阈值后，拥塞窗口按这个比例放大：1 个数据段的字节数 / 拥塞窗口（字节）* 1 个 数据段字节数，丈夫会逐渐呈直线上升趋势。</li>
+<li><strong>快恢复</strong>：而由重复确认应答进行<strong>高速重发</strong>控制时，慢启动阈值被设置为当前窗口大小的一半，窗口大小设置为慢启动阈值+3个数据段的大小，继续直线上升。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>延迟确认应答是能够提高网络利用率从而降低计算机处理负荷的一种较优的处理机制。</p>
+<ul>
+<li>在没有收到 2x最大段长度的数据为止不做确认应答。（有的操作系统是收到两个包就即可返回）</li>
+<li>其他情况下，最大延迟 0.5 秒发送确认应答。（有的操作系统设置为 0.2 秒左右）</li>
+</ul>
+</li>
+<li><p>为什么建立握手三次连接，断开握手四次连接。</p>
+<p>TCP 是一个双向的连接，服务端和客户端双方都有发送和接收数据的能力，因此双方都需要获得对方确认号，从而进入<code>ESTABLISHED</code>状态。</p>
+<ol>
+<li>进入<code>ESTABLISHED</code>状态首先需要向对方发起同步序列包（SYN），对方收到后返回一个确认包（ACK）。</li>
+<li>因此最简单的双方建立连接是经过四次的握手才建立的：1.客户端发送 <code>SYN</code>包；2. 服务端返回 <code>ACK</code> 包；3. 服务端发送 <code>SYN</code> 包；4. 客户端返回 <code>ACK</code>包。</li>
+<li>如果只有两次握手，也就是到第 2 步就建立连接，这样只有客户端确认服务端就绪，服务端则无法确定客户端就绪。假设 ACK 包丢失了，服务端在不知情的情况下开始发送数据，客户端只接收 ACK 包而忽略发来的数据，服务端没收到响应而一直发相同数据，从而会形成<strong>死锁</strong>。</li>
+<li>而 TCP 中，第 2、3 步是可以同时完成的，因此这两步的包合成一个 <code>SYN + ACK</code> 包，因此只需要三次握手即可完成建立连接。</li>
+</ol>
+<p>同样，断开连接也是如此，双方需要关闭各自的通路。</p>
+<ol>
+<li>和建立连接类似，首先向对方发送 <code>FIN</code> 包，对方收到后返回 <code>ACK</code>包，这样就可以关闭自己的通路。整体的流程为：1.客户端发送 <code>FIN</code>包；2. 服务端返回 <code>ACK</code> 包；3. 服务端发送 <code>FIN</code> 包；4. 客户端返回 <code>ACK</code>包。</li>
+<li>和建立连接不同的是，在第 2 步服务端返回 <code>ACK</code> 包时，服务端可能还有数据没有发完，因此不能立即进行第 3 步发送，需要等数据发送完才能向客户端发 <code>FIN</code> 包断开连接。因此需要完整的四次挥手。</li>
+</ol>
+</li>
+<li><p>为什么第四次挥手时，客户端进入 <code>TIME_WAIT</code> 状态而不是直接关闭？</p>
+<ol>
+<li>假如第四次挥手时客户端直接进入<code>CLOSED</code>状态，然而发送的 <code>ACK</code>包丢失了，服务端在超时后会重发<code>FIN</code>包，这时因为客户端已经进入了<code>CLOSED</code>状态，返回的不是<code>ACK</code>包，而是<code>RST</code>包，服务端接收到 <code>RST</code>会认为连接错误，无法进入关闭状态，从而导致 TCP 协议不可靠。</li>
+<li>另一个原因是需要让旧数据包过期消失，假如客户端发送 <code>SYN</code>超时了，重发一次才成功建立连接，然后完成数据交互并断开了连接。这时假设第一次发送超时的请求终于到了，这个请求本应是无效的，服务端在不知情的情况下又再次建立连接。等待 2MSL 的目的就是让这种旧的数据包过期失效，因此如果在关闭连接后马上重连，就会出现端口不可用的情况。2 倍 MSL 时间是一个发送和一个回复所需要的最大时间。</li>
+</ol>
+</li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/2020/03/30/%E5%9B%BE%E8%A7%A3%20HTTP/" class="prev">PREV</a></div><div class="copyright"><p>© 2020 <a href="http://yoursite.com">senyu</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
