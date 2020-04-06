@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="senyu">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Swift 与 OC 混编 | senyu&#39;s blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="senyu's blog" type="application/atom+xml">
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>senyu's blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Swift 与 OC 混编</h2>
+  <p class="post-date">2019-04-28</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Swift与OC混编"><a href="#Swift与OC混编" class="headerlink" title="Swift与OC混编"></a>Swift与OC混编</h2><h3 id="Swift工程中调用OC代码"><a href="#Swift工程中调用OC代码" class="headerlink" title="Swift工程中调用OC代码"></a>Swift工程中调用OC代码</h3><p>不需要在Swift中import OC的类，统一在桥接文件中导入需要暴露给Swift的OC类即可在Swift中访问。具体步骤如下：</p>
+<ol>
+<li><p>创建桥接文件：<br>在Swift工程里创建OC文件，创建完成后Xcode会问你是否需要创建桥接文件，点击<code>Create Bridging Header</code>即可创建桥接文件，并设置好了文件路径。<br><img src="https://upload-images.jianshu.io/upload_images/4881420-9c1bc1525c63eee6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="auto create"></p>
+<p> 还可以手动添加桥接文件，首先创建一个<code>.h</code>文件，命名格式为<code>ProductName-Bridging-Header.h</code>，<br><img src="https://upload-images.jianshu.io/upload_images/4881420-e592ae41a35a9fa8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="manual create"></p>
+<p> 其中<code>Product Name</code>一般是工程名，在<code>Build Settings</code>里面可以搜索到。<br><img src="https://upload-images.jianshu.io/upload_images/4881420-d8ce3a226b86c96c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Product Name"></p>
+<p> 创建完桥接文件之后，还需手动添加文件路径配置，在<code>Build Settings</code>-&gt;<code>Objective-C Bridging Header</code>中加入相对路径，路径起始位置就是工程文件的位置，在这里的示例是放在工程目录。<br> <img src="https://upload-images.jianshu.io/upload_images/4881420-669fce21e2eb3834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="path"></p>
+</li>
+<li><p>在桥接文件中导入需要的OC类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OCTest.h&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用OC类的方法<br>在任意Swift文件都可以使用导入的OC类的方法，也可以是C方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OCTest.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation OCTest</span><br><span class="line"></span><br><span class="line">- (void)test &#123;</span><br><span class="line">    NSLog(@&quot;This is a OC test method&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ctest() &#123;</span><br><span class="line">    printf(&quot;This is a C method&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>和普通Swift类使用的方法一样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">override func viewDidLoad() &#123;</span><br><span class="line">    super.viewDidLoad()</span><br><span class="line">    &#x2F;&#x2F; Do any additional setup after loading the view.</span><br><span class="line">        </span><br><span class="line">    OCTest().test()</span><br><span class="line">    ctest()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">2019-04-28 17:48:58.178346+0800 Swift5Demo[95779:2516896] This is a OC test method</span><br><span class="line">This is a C method</span><br></pre></td></tr></table></figure>
+<h3 id="OC调用Swift代码"><a href="#OC调用Swift代码" class="headerlink" title="OC调用Swift代码"></a>OC调用Swift代码</h3></li>
+<li><p>首先把<code>Build Settings</code> -&gt; <code>Defines Module</code>设为<code>YES</code><br><img src="https://upload-images.jianshu.io/upload_images/4881420-2b60fc30eb947ee1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Defines Module"></p>
+</li>
+<li><p>在OC工程中，添加了Swift文件后，Xcode会根据Target创建<code>Objective-C Generated interface Header</code>，即Swift转换OC下生成的接口头文件，在<code>Build Settings</code>-&gt;<code>Objective-C Generated interface Header Name</code>可以查看：<br><img src="https://upload-images.jianshu.io/upload_images/4881420-197ed03d11a5f4ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Objective-C Generated interface Header Name"></p>
+</li>
+<li><p>注意，Swift的类、属性或方法如果想要在OC中使用的，都需要在前面加上<code>@objc open</code>修饰符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@objc open class SwiftTest: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    @objc open var str &#x3D; &quot;swift param&quot;</span><br><span class="line">    </span><br><span class="line">    @objc open func test() &#123;</span><br><span class="line">        print(&quot;This is a Swift method.&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用Swift方法<br>首先引入接口头文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OpenDemo-Swift.h&quot;</span><br></pre></td></tr></table></figure>
+<p>然后即可调用Swift的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SwiftTest *swiftTest &#x3D; [[SwiftTest alloc] init];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%@&quot;, swiftTest.str);</span><br><span class="line">[swiftTest test];</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">2019-04-28 17:03:51.478585+0800 OpenDemo[94511:2459635] swift param</span><br><span class="line">This is a Swift method.</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Swift和C"><a href="#Swift和C" class="headerlink" title="Swift和C++"></a>Swift和C++</h2><p>Swift不能直接调用C++，但是Objective-C与C++是可以混编，而且可以使用STL，办法就是将OC的.m文件后缀改成.mm，然后在OC类中调用C++的类，封装成几个公共的方法就可以了。这时再用swift来调用OC类里的方法，就可以执行C++语句了。</p>
+<ol>
+<li>创建C++类<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#ifndef CppTest_hpp</span><br><span class="line">#define CppTest_hpp</span><br><span class="line"></span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">class Test &#123;</span><br><span class="line">public:</span><br><span class="line">    void test();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">---------------------------------</span><br><span class="line"></span><br><span class="line">#include &quot;CppTest.hpp&quot;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">void Test::test() &#123;</span><br><span class="line">    cout &lt;&lt; &quot;Hello world&quot; &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建一个OC类调用C++方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CppTestWraper.h&quot;</span><br><span class="line">#import &quot;CppTest.hpp&quot;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">@implementation CppTestWraper</span><br><span class="line"></span><br><span class="line">- (void)test &#123;</span><br><span class="line">    Test* cppTest &#x3D; new Test();</span><br><span class="line">    cppTest-&gt;test();</span><br><span class="line">    delete cppTest;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure></li>
+<li>Swift调用OC方法同上，最后调用：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CppTestWraper().test()</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Hello world</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Tips" >
+    <span class="tag-code">Tips</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/03/18/iOS%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E4%B9%8BMVP/">
+        <span class="nav-arrow">← </span>
+        
+          iOS 架构模式之 MVP
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/05/07/PhotoKit%20crash%20--%20This%20application%20is%20not%20allowed%20to%20access%20Photo%20data/">
+        
+          【Crash】 PhotoKit--This application is not allowd to access Photo data
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://xsenyu.github.io/2019/04/28/Swift与OC混编/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Posted by <a href="">senyu</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="senyu">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      iOS 架构模式之 MVP | senyu&#39;s blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="senyu's blog" type="application/atom+xml">
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>senyu's blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>iOS 架构模式之 MVP</h2>
+  <p class="post-date">2019-03-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>软件开发中，最常见的设计模式是<code>Model-View-Controller</code>(MVC)，<code>MVC</code>也是构建<code>Cocoa</code>应用程序的标准模板，<code>MVC</code>设计模式为应用程序中的对象分配三个角色之一：模型，视图或控制器。采用这种模式的好处很多，这些应用程序中的许多对象往往更具可重用性，比其他应用程序更容易扩展。<code>Apple</code>对于<code>Cocoa</code>的MVC框架各角色之间的关系定义如下：<br><img src="https://upload-images.jianshu.io/upload_images/4881420-bd095c1fb37245b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AppleMVC.png"></p>
+<p>但随着时间的推移，开发的业务不断增多，<code>MVC</code>暴露出了越来越多的问题，随之而衍生出<code>MVP</code>、<code>MVVM</code>、<code>VIPER</code>等更高级架构。本文会先总结<code>MVC</code>在iOS应用开发中的存在的问题，再对<code>MVP</code>设计模式进行客观性描述。</p>
+<h3 id="MVC架构的缺陷"><a href="#MVC架构的缺陷" class="headerlink" title="MVC架构的缺陷"></a>MVC架构的缺陷</h3><ol>
+<li><p>厚重的Controller难以维护。</p>
+<p><code>Controller</code> 层是app的中枢机构，协调模型和视图之间的所有交互,其不仅管理所拥有的视图的视图层次结构，还要响应视图的用户交互操作等等，同时往往也会充满<code>Model</code>层模型逻辑以及<code>View</code>层业务逻辑等等的“胶水代码”。 厚重的Controller 正是由于大量的代码被放进 <code>UIViewController</code>，导致他们变的相当臃肿，一个 <code>UIViewController</code>里的代码成千上万行的事并不是前所未见的。</p>
+<p> 对于厚重的<code>Controller</code>，由于其庞大的规模往往很难维护；包含几十个属性，使他们的状态难以管理；遵循许多协议，导致协议的响应代码和<code>Controller</code>的逻辑代码混淆在一起。行业中对这种控制器有个专业词汇<code>Massive ViewControler</code>（臃肿的视图控制器）。</p>
+</li>
+<li><p>Model层过于单薄。</p>
+<p> 我们通常会在<code>Model</code>层定义数据成员属性，由于无需再手动管理释放变量，Model层既没有对象的构造，也没有复杂的业务处理，<code>implementation</code>基本上都是空的。然而根据 <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/MVC.html" target="_blank" rel="noopener">Apple MVC</a><br>文档的描述，<code>Model</code>应包括操作和处理该数据的逻辑和计算，其业务逻辑不应被拖入到<code>Controller</code>。</p>
+<blockquote>
+<p>Model objects encapsulate the data specific to an application and define the logic and computation that manipulate and process that data. …</p>
+</blockquote>
+</li>
+<li><p>较差的可测试性。</p>
+<p> 这一点一方面是因为<code>Cocoa</code>框架里的<code>Controller</code>层，就是我们最熟悉的<code>UIViewController</code>和<code>UIView</code>是天然耦合的，很多<code>UIView</code>的生命周期方法都存在于<code>UIViewController</code>，另一方面我们很多时候也习惯于把UI操作甚至初始化操作放在<code>UIViewController</code>里，导致UI和业务逻辑混杂在一起。当你想对业务逻辑编写单元测试的时候，分离这些成分的单元测试成了一个艰巨的任务，因此大多数人选择忽略这个任务，那就是不做任何测试。</p>
+</li>
+</ol>
+<p><code>Controller</code> 和 <code>View</code> 很难做到相互独立。虽然你可以把控制器里的一些业务逻辑和数据转换的工作交给 <code>Model</code>，但是你再想把负担往 <code>View</code> 里面分摊的时候就没办法了；因为 <code>View</code> 的主要职责就只是将用户的操作行为交给 <code>Controller</code> 去处理而已。于是 <code>ViewController</code> 最终就变成了所有东西的代理和数据源，甚至还负责网络请求的发起和取消。MVC的架构变成了:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4881420-bc70b3b7d1110bff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Real MVC"></p>
+<h3 id="MVC的优化方案之MVP"><a href="#MVC的优化方案之MVP" class="headerlink" title="MVC的优化方案之MVP"></a>MVC的优化方案之MVP</h3><p><code>Model-View-Presenter</code>(MVP)是<code>MVC</code>体系结构模式的一种变体，其主要目的是将放在<code>Controller</code>里面的业务逻辑抽离出来，让<code>UIViewController</code>和<code>UIView</code>整合成<code>View</code>层，只负责页面布局和交互相关功能，从而减轻<code>UIViewController</code>的负担，并有利于对业务逻辑功能进行单元测试。</p>
+<ul>
+<li>Model层：数据层，或者负责处理数据的 <a href="https://en.wikipedia.org/wiki/Data_access_layer" target="_blank" rel="noopener">数据接口层</a>。比如 <em>Person</em> 和 <em>PersonDataProvider</em> 类</li>
+<li>View层：展示层(GUI)。对于 iOS 来说所有以 UI 开头的类基本都属于这层。</li>
+<li>Presenter层：作为中间人，协调其他层之间的逻辑。一般来说，当用户对 View 有操作时它负责去修改相应 Model；当 Model 的值发生变化时它负责去更新对应 View。</li>
+</ul>
+<p>MVP在1996年就已经被提出，发展到现在已经出现好多变种，这里提供一种目前比较多人使用的规范：</p>
+<ul>
+<li><code>View</code>层是由<code>UIViewController</code>和<code>UIView</code>共同组成；</li>
+<li><code>View</code>层将委托<code>Presenter</code>层对它自己的操作；</li>
+<li><code>Presenter</code>层拥有对<code>View</code>层交互的逻辑；</li>
+<li><code>Presenter</code>层跟<code>Model</code>层通信，并将数据转化成对适应UI的数据并更新<code>View</code>；</li>
+<li><code>Presenter</code>不需要依赖<code>UIKit</code>；</li>
+<li><code>View</code>层是单一，因为它是被动接受命令，没有主动能力。</li>
+</ul>
+<p>根据以上规范，不同层级关系图如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4881420-db4bbe124003f207.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MVP"></p>
+<h3 id="MVP带来的便利"><a href="#MVP带来的便利" class="headerlink" title="MVP带来的便利"></a>MVP带来的便利</h3><ul>
+<li>职责划分清晰 — 业务逻辑划分到Presenter和Model，View只负责页面交互，从而降低耦合度。</li>
+<li>可测性强 — 基于一个功能简单的View层，可以测试大多数业务逻辑。</li>
+<li>复用性 — Presenter和View之间通过抽象方法交互，同样的业务逻辑可以很方便复用。</li>
+</ul>
+<h3 id="MVP的缺点"><a href="#MVP的缺点" class="headerlink" title="MVP的缺点"></a>MVP的缺点</h3><p>由于对视图的渲染放在了Presenter中，所以视图和Presenter的交互会过于频繁。还有一点需要明白，如果Presenter过多地渲染了视图，往往会使得它与特定的视图的联系过于紧密。一旦视图需要变更，那么Presenter也需要变更了</p>
+<h3 id="在iOS工程中使用MVP架构"><a href="#在iOS工程中使用MVP架构" class="headerlink" title="在iOS工程中使用MVP架构"></a>在iOS工程中使用MVP架构</h3><p>接下来会用一个简单的例子说明在iOS实际开发中如何使用<code>MVP</code>进行设计。例子是一个模拟获取用户数据显示到列表的demo。下面是详细设计过程：</p>
+<ul>
+<li><strong>Model层</strong></li>
+</ul>
+<p>首先定义用户信息的<code>Model</code>；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@interface User : NSObject</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) NSString *firstName;</span><br><span class="line">@property (nonatomic, strong) NSString *lastName;</span><br><span class="line">@property (nonatomic, strong) NSString *email;</span><br><span class="line">@property (nonatomic, assign) int age;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 类方法构造对象</span><br><span class="line">+ (User *)userWithFirstName:(NSString *)firstName </span><br><span class="line">                   lastName:(NSString *)lastName </span><br><span class="line">                      email:(NSString *)email </span><br><span class="line">                        age:(int)age;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>另外定义一个<code>Service</code>，专门负责数据处理，在这里模拟请求返回数据；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@implementation UserService</span><br><span class="line"></span><br><span class="line">- (void)getUsers:(void(^)(NSArray&lt;User *&gt; *users))handler &#123;</span><br><span class="line">    User *user1 &#x3D; [User userWithFirstName:@&quot;First1&quot; lastName:@&quot;Last1&quot; email:@&quot;Iyad@test.com&quot; age:36];</span><br><span class="line">    User *user2 &#x3D; [User userWithFirstName:@&quot;First2&quot; lastName:@&quot;Last2&quot; email:@&quot;Mila@test.com&quot; age:24];</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 模拟网络请求耗时</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        handler(@[user1, user2]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Presenter层</strong></li>
+</ul>
+<p>首先创建一个能让<code>View</code>直接使用的数据模型，其包含<code>View</code>需要的所有信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@interface UserViewData : NSObject</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) NSString *name;</span><br><span class="line">@property (nonatomic, strong) NSString *age;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>接下来是<code>View</code>的抽象方法，<code>Presenter</code>可以不用知道是哪个<code>ViewController</code>，就可以直接调用其方法，在这里使用<code>protocol</code>方法；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@protocol UserView &lt;NSObject&gt; </span><br><span class="line"></span><br><span class="line">- (void)startLoading;</span><br><span class="line">- (void)finishLoading;</span><br><span class="line">- (void)setUsers:(NSArray&lt;UserViewData *&gt; *)users;</span><br><span class="line">- (void)setEmptyUsers;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>协议中的方法会在<code>View</code>中实现，<code>Presenter</code>会调用这些方法来更新界面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">@interface UserPresenter() </span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UserService *userService;</span><br><span class="line">@property (nonatomic, weak) id&lt;UserView&gt; userView;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation UserPresenter </span><br><span class="line"></span><br><span class="line">- (instancetype)initWithUserService:(UserService *)userService &#123;</span><br><span class="line">    if (self &#x3D; [super init]) &#123;</span><br><span class="line">        self.userService &#x3D; userService;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)attachView:(id&lt;UserView&gt;)view &#123;</span><br><span class="line">    _userView &#x3D; view;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)detachView &#123;</span><br><span class="line">    _userView &#x3D; nil;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)getUsers &#123;</span><br><span class="line">    [_userView startLoading];</span><br><span class="line">    __weak typeof(self) weakSelf &#x3D; self;</span><br><span class="line">    [_userService getUsers:^(NSArray&lt;User *&gt; *users)&#123;</span><br><span class="line">        [weakSelf.userView finishLoading];</span><br><span class="line">        if (users.count &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            [weakSelf.userView setEmptyUsers];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            NSMutableArray *userArray &#x3D; [NSMutableArray array];</span><br><span class="line">            for(User *user in users) &#123;</span><br><span class="line">                UserViewData *userData &#x3D; [[UserViewData alloc] init];</span><br><span class="line">                userData.name &#x3D; [NSString stringWithFormat:@&quot;%@ %@&quot;, user.firstName, user.lastName];</span><br><span class="line">                userData.age &#x3D; [NSString stringWithFormat:@&quot;%d years&quot;, user.age];</span><br><span class="line">                [userArray addObject:userData];</span><br><span class="line">            &#125;</span><br><span class="line">            [weakSelf.userView setUsers:userArray];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>Presenter通过<code>attachView:</code>方法绑定视图，并实现业务逻辑，在数据更新时调用协议方法更新界面；Presenter内还包含关于User数据模型转换成视图能用的<code>UserViewData</code>格式的工作。</p>
+<ul>
+<li><strong>View层</strong></li>
+</ul>
+<p><code>View</code>持有<code>Presenter</code>对象，实现<code>Presenter</code>页面交互协议方法，并在初始化时绑定到，用户交互时调用<code>Presenter</code>更新数据；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">@interface ViewController()&lt;UITableViewDataSource, UserView&gt;</span><br><span class="line"></span><br><span class="line">@property (weak, nonatomic) IBOutlet UIView *emptyView;</span><br><span class="line">@property (weak, nonatomic) IBOutlet UITableView *tableView;</span><br><span class="line">@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UserPresenter *userPresenter;</span><br><span class="line">@property (nonatomic, strong) NSArray *usersToDisplay;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">#pragma mark - life cycles</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    _tableView.dataSource &#x3D; self;</span><br><span class="line">    _activityIndicator.hidesWhenStopped &#x3D; YES;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 绑定视图</span><br><span class="line">    [self.userPresenter attachView:self];</span><br><span class="line">    &#x2F;&#x2F; 获取用户数据</span><br><span class="line">    [self.userPresenter getUsers];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - UserView</span><br><span class="line">- (void)startLoading &#123;</span><br><span class="line">    [_activityIndicator startAnimating];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)finishLoading &#123;</span><br><span class="line">    [_activityIndicator stopAnimating];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setUsers:(NSArray&lt;UserViewData *&gt; *)users &#123;</span><br><span class="line">    _usersToDisplay &#x3D; users;</span><br><span class="line">    _tableView.hidden &#x3D; NO;</span><br><span class="line">    _emptyView.hidden &#x3D; YES;</span><br><span class="line">    [_tableView reloadData];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setEmptyUsers &#123;</span><br><span class="line">    _tableView.hidden &#x3D; YES;</span><br><span class="line">    _tableView.hidden &#x3D; NO;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - UITableViewDataSource</span><br><span class="line">- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section &#123;</span><br><span class="line">    return self.usersToDisplay.count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath &#123;</span><br><span class="line">    UITableViewCell *cell &#x3D; [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@&quot;UserCell&quot;];</span><br><span class="line">    UserViewData *user &#x3D; [self.usersToDisplay objectAtIndex:indexPath.row];</span><br><span class="line">    cell.textLabel.text &#x3D; user.name;</span><br><span class="line">    cell.detailTextLabel.text &#x3D; user.age;</span><br><span class="line">    return cell;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - getters and setters</span><br><span class="line">- (UserPresenter *)userPresenter &#123;</span><br><span class="line">    if (_userPresenter &#x3D;&#x3D; nil) &#123;</span><br><span class="line">        UserService *userService &#x3D; [[UserService alloc] init];</span><br><span class="line">        _userPresenter &#x3D; [[UserPresenter alloc] initWithUserService:userService];</span><br><span class="line">    &#125;</span><br><span class="line">    return _userPresenter;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSArray *)usersToDisplay &#123;</span><br><span class="line">    if (_usersToDisplay &#x3D;&#x3D; nil) &#123;</span><br><span class="line">        _usersToDisplay &#x3D; [NSArray array];</span><br><span class="line">    &#125; </span><br><span class="line">    return _usersToDisplay;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Technology" >
+    <span class="tag-code">Technology</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+    
+      <a class="nav-right" href="/2019/04/28/Swift%E4%B8%8EOC%E6%B7%B7%E7%BC%96/">
+        
+          Swift 与 OC 混编
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://xsenyu.github.io/2019/03/18/iOS架构模式之MVP/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Posted by <a href="">senyu</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

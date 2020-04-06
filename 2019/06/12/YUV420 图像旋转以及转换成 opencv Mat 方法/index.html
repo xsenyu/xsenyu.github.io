@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="senyu">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      YUV420 图像旋转以及转换成 cv::Mat 方法 | senyu&#39;s blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="senyu's blog" type="application/atom+xml">
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>senyu's blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>YUV420 图像旋转以及转换成 cv::Mat 方法</h2>
+  <p class="post-date">2019-06-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h3 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; rotateConstant: 0 - 0°，1 - 90°，2 - 180°，3 - 270°</span><br><span class="line">- (CVPixelBufferRef)rotateBuffer:(CVPixelBufferRef)imageBuffer withConstant:(uint8_t)rotationConstant &#123;</span><br><span class="line">    vImage_Error err &#x3D; kvImageNoError;</span><br><span class="line">    CVPixelBufferLockBaseAddress(imageBuffer, 0);</span><br><span class="line">    size_t width &#x3D; CVPixelBufferGetWidth(imageBuffer);</span><br><span class="line">    size_t height &#x3D; CVPixelBufferGetHeight(imageBuffer);</span><br><span class="line">    size_t outHeight &#x3D; width;</span><br><span class="line">    size_t outWidth &#x3D; height;</span><br><span class="line"></span><br><span class="line">    assert(CVPixelBufferGetPixelFormatType(imageBuffer) &#x3D;&#x3D; kCVPixelFormatType_420YpCbCr8BiPlanarFullRange);</span><br><span class="line">    assert(CVPixelBufferGetPlaneCount(imageBuffer) &#x3D;&#x3D; 2); </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; create buffer</span><br><span class="line">    CVPixelBufferRef rotatedBuffer &#x3D; NULL;</span><br><span class="line">    CVPixelBufferCreate(kCFAllocatorDefault, outWidth, outHeight, kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, NULL, &amp;rotatedBuffer);</span><br><span class="line">    CVPixelBufferLockBaseAddress(rotatedBuffer, 0);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; rotate Y plane</span><br><span class="line">    vImage_Buffer originalYBuffer &#x3D; &#123; CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0), CVPixelBufferGetHeightOfPlane(imageBuffer, 0),</span><br><span class="line">        CVPixelBufferGetWidthOfPlane(imageBuffer, 0), CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0) &#125;;</span><br><span class="line">    vImage_Buffer rotatedYBuffer &#x3D; &#123; CVPixelBufferGetBaseAddressOfPlane(rotatedBuffer, 0), CVPixelBufferGetHeightOfPlane(rotatedBuffer, 0),</span><br><span class="line">        CVPixelBufferGetWidthOfPlane(rotatedBuffer, 0), CVPixelBufferGetBytesPerRowOfPlane(rotatedBuffer, 0) &#125;;</span><br><span class="line">    err &#x3D; vImageRotate90_Planar8(&amp;originalYBuffer, &amp;rotatedYBuffer, rotationConstant, 0.0, kvImageNoFlags);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; rotate UV plane</span><br><span class="line">    vImage_Buffer originalUVBuffer &#x3D; &#123; CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1), CVPixelBufferGetHeightOfPlane(imageBuffer, 1),</span><br><span class="line">        CVPixelBufferGetWidthOfPlane(imageBuffer, 1), CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1) &#125;;</span><br><span class="line">    vImage_Buffer rotatedUVBuffer &#x3D; &#123; CVPixelBufferGetBaseAddressOfPlane(rotatedBuffer, 1), CVPixelBufferGetHeightOfPlane(rotatedBuffer, 1),</span><br><span class="line">    CVPixelBufferGetWidthOfPlane(rotatedBuffer, 1), CVPixelBufferGetBytesPerRowOfPlane(rotatedBuffer, 1) &#125;;</span><br><span class="line">    err &#x3D; vImageRotate90_Planar16U(&amp;originalUVBuffer, &amp;rotatedUVBuffer, rotationConstant, 0.0, kvImageNoFlags);</span><br><span class="line"></span><br><span class="line">    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);</span><br><span class="line">    CVPixelBufferUnlockBaseAddress(rotatedBuffer, 0);</span><br><span class="line"></span><br><span class="line">    return rotatedBuffer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="转换为-cv-Mat-格式"><a href="#转换为-cv-Mat-格式" class="headerlink" title="转换为 cv::Mat 格式"></a>转换为 cv::Mat 格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">+ (Mat)matFromImageBuffer: (CVPixelBufferRef)pixelBuffer &#123;</span><br><span class="line">    CVPixelBufferLockBaseAddress(pixelBuffer, 0);</span><br><span class="line">    </span><br><span class="line">    void *baseaddress &#x3D; CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);</span><br><span class="line">    int bufferWidth &#x3D; (int)CVPixelBufferGetWidthOfPlane(pixelBuffer,0);</span><br><span class="line">    int bufferHeight &#x3D; (int)CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);</span><br><span class="line"></span><br><span class="line">    cv::Mat converted;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Get the yPlane (Luma values)</span><br><span class="line">    cv::Mat yPlane &#x3D; cv::Mat(bufferHeight, bufferWidth, CV_8UC1, baseaddress);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Get cbcrPlane (Chroma values)</span><br><span class="line">    int cbcrWidth &#x3D; (int)CVPixelBufferGetWidthOfPlane(pixelBuffer,1);</span><br><span class="line">    int cbcrHeight &#x3D; (int)CVPixelBufferGetHeightOfPlane(pixelBuffer, 1);</span><br><span class="line">    void *cbcrAddress &#x3D; CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);</span><br><span class="line">    &#x2F;&#x2F; Since the CbCr Values are alternating we have 2 channels: Cb and Cr. Thus we need to use CV_8UC2 here.</span><br><span class="line">    cv::Mat cbcrPlane &#x3D; cv::Mat(cbcrHeight, cbcrWidth, CV_8UC2, cbcrAddress);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Split them apart so we can merge them with the luma values</span><br><span class="line">    std::vector&lt;cv::Mat&gt; cbcrPlanes;</span><br><span class="line">    cv::split(cbcrPlane, cbcrPlanes);</span><br><span class="line"></span><br><span class="line">    cv::Mat cbPlane;</span><br><span class="line">    cv::Mat crPlane;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Since we have a 4:2:0 format, cb and cr values are only present for each 2x2 luma pixels. Thus we need to enlargen them (by a factor of 2).</span><br><span class="line">    cv::resize(cbcrPlanes[0], cbPlane, yPlane.size(), 0, 0, cv::INTER_NEAREST);</span><br><span class="line">    cv::resize(cbcrPlanes[1], crPlane, yPlane.size(), 0, 0, cv::INTER_NEAREST);</span><br><span class="line"></span><br><span class="line">    cv::Mat ycbcr;</span><br><span class="line">    std::vector&lt;cv::Mat&gt; allPlanes &#x3D; &#123;yPlane, cbPlane, crPlane&#125;;</span><br><span class="line">    cv::merge(allPlanes, ycbcr);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; ycbcr now contains all three planes. We need to convert it from YCbCr to BGR so OpenCV can work with it</span><br><span class="line">    cv::cvtColor(ycbcr, converted, cv::COLOR_YCrCb2BGR);</span><br><span class="line"></span><br><span class="line">    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);</span><br><span class="line">    </span><br><span class="line">    return converted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Tips" >
+    <span class="tag-code">Tips</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/05/20/iOS%209%20WKWebView%20%E8%AE%BE%E7%BD%AEUIScrollViewDelegate%E5%B4%A9%E6%BA%83%E9%97%AE%E9%A2%98/">
+        <span class="nav-arrow">← </span>
+        
+          【Crash】 WKWebView 设置 UIScrollViewDelegate
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/07/25/WWDC%202019%20Section%20304-%20App%20Distribution%20%E2%80%93%20From%20Ad-hoc%20to%20Enterprise/">
+        
+          WWDC 2019 Section 304 -- App Distribution – From Ad-hoc to Enterprise
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://xsenyu.github.io/2019/06/12/YUV420 图像旋转以及转换成 opencv Mat 方法/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Posted by <a href="">senyu</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>
