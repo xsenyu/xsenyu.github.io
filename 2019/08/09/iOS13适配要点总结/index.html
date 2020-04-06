@@ -127,17 +127,18 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><p>本文在 <a href="https://juejin.im/user/5d8af836518825093a357646/posts" target="_blank" rel="noopener">掘金</a> 也持续更新。</p>
-<h2 id="iOS-13-支持适配的机型"><a href="#iOS-13-支持适配的机型" class="headerlink" title="iOS 13 支持适配的机型"></a>iOS 13 支持适配的机型</h2><ul>
-<li>iPhone 11、iPhone 11 Pro、iPhone 11 Pro Max</li>
-<li>iPhone X、iPhone XR、iPhone XS、iPhone XS Max</li>
-<li>iPhone 8、iPhone 8 Plus</li>
-<li>iPhone 7、iPhone 7 Plus</li>
-<li>iPhone 6s、iPhone 6s Plus</li>
-<li>iPhone SE</li>
-<li>iPod touch (第七代)</li>
-<li>后续发布的新版本 iPhone</li>
-</ul>
+    <section class="markdown-content"><meta name="referrer" content="no-referrer">
+本文在 [掘金](https://juejin.im/user/5d8af836518825093a357646/posts) 也持续更新。
+## iOS 13 支持适配的机型
+* iPhone 11、iPhone 11 Pro、iPhone 11 Pro Max
+* iPhone X、iPhone XR、iPhone XS、iPhone XS Max
+* iPhone 8、iPhone 8 Plus
+* iPhone 7、iPhone 7 Plus
+* iPhone 6s、iPhone 6s Plus
+* iPhone SE
+* iPod touch (第七代)
+* 后续发布的新版本 iPhone
+
 <h2 id="适配时间节点要求"><a href="#适配时间节点要求" class="headerlink" title="适配时间节点要求"></a>适配时间节点要求</h2><blockquote>
 <p>2019 年 11 月 5 日</p>
 </blockquote>
@@ -205,7 +206,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</span><br><span class="line">    if (![deviceToken isKindOfClass:[NSData class]]) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    const unsigned char *tokenBytes &#x3D; deviceToken.bytes; </span><br><span class="line">    NSInteger count &#x3D; deviceToken.length;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 数据格式处理</span><br><span class="line">    NSMutableString *hexToken &#x3D; [NSMutableString string];</span><br><span class="line">    for (int i &#x3D; 0; i &lt; count; ++i) &#123;</span><br><span class="line">        [hexToken appendFormat:@&quot;%02x&quot;, tokenBytes[i]];</span><br><span class="line">    &#125;</span><br><span class="line">    NSLog(@&quot;deviceToken:%@&quot;, hexToken);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-模态视图的默认样式发生改变"><a href="#3-模态视图的默认样式发生改变" class="headerlink" title="3. 模态视图的默认样式发生改变"></a>3. <span id="present">模态视图的默认样式发生改变</span></h3><p>在 iOS 13，使用 <code>presentViewController</code> 方式打开模态视图，默认的如下图所示的视差效果，通过下滑返回。</p>
-<p><img src="/.io//UIModalPresentationAutomatic.gif" alt="UIModalPresentationAutomatic"></p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/9/25/16d66db07ffd0894?w=300&h=620&f=gif&s=472271" alt="UIModalPresentationAutomatic"></p>
 <p>这是因为苹果将 <code>UIViewController</code> 的 <code>modalPresentationStyle</code> 属性的默认值改成了新加的一个枚举值  <a href="https://developer.apple.com/documentation/uikit/uimodalpresentationstyle/uimodalpresentationautomatic?language=objc" target="_blank" rel="noopener">UIModalPresentationAutomatic</a>，对于多数 <code>UIViewController</code>，此值会映射成 <code>UIModalPresentationPageSheet</code>。</p>
 <p>需要注意，这种效果弹出来的页面导航栏部分是会被砍掉的，在 storyboard 中也可以看到，页面布局时需要注意导航栏的内容不要被遮挡。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/9/25/16d66db08020a579?w=300&h=221&f=png&s=49603" alt="Storyboard"></p>
