@@ -127,7 +127,10 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>软件开发中，最常见的设计模式是<code>Model-View-Controller</code>(MVC)，<code>MVC</code>也是构建<code>Cocoa</code>应用程序的标准模板，<code>MVC</code>设计模式为应用程序中的对象分配三个角色之一：模型，视图或控制器。采用这种模式的好处很多，这些应用程序中的许多对象往往更具可重用性，比其他应用程序更容易扩展。<code>Apple</code>对于<code>Cocoa</code>的MVC框架各角色之间的关系定义如下：<br><img src="https://upload-images.jianshu.io/upload_images/4881420-bd095c1fb37245b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AppleMVC.png"></p>
+    <section class="markdown-content"><meta name="referrer" content="no-referrer">
+### 前言
+
+<p>软件开发中，最常见的设计模式是<code>Model-View-Controller</code>(MVC)，<code>MVC</code>也是构建<code>Cocoa</code>应用程序的标准模板，<code>MVC</code>设计模式为应用程序中的对象分配三个角色之一：模型，视图或控制器。采用这种模式的好处很多，这些应用程序中的许多对象往往更具可重用性，比其他应用程序更容易扩展。<code>Apple</code>对于<code>Cocoa</code>的MVC框架各角色之间的关系定义如下：<br><img src="https://upload-images.jianshu.io/upload_images/4881420-bd095c1fb37245b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AppleMVC.png"></p>
 <p>但随着时间的推移，开发的业务不断增多，<code>MVC</code>暴露出了越来越多的问题，随之而衍生出<code>MVP</code>、<code>MVVM</code>、<code>VIPER</code>等更高级架构。本文会先总结<code>MVC</code>在iOS应用开发中的存在的问题，再对<code>MVP</code>设计模式进行客观性描述。</p>
 <h3 id="MVC架构的缺陷"><a href="#MVC架构的缺陷" class="headerlink" title="MVC架构的缺陷"></a>MVC架构的缺陷</h3><ol>
 <li><p>厚重的Controller难以维护。</p>

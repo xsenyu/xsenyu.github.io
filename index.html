@@ -121,20 +121,6 @@
   
     <article class="article-card">
       <h2 class="article-head">
-        <a href="/2020/04/06/%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BD%95/">知识点记录</a>
-      </h2>
-      <p class="article-date">April 6, 2020</p>
-      
-      <div class="article-summary">
-        
-          
-        
-      </div>
-      <a class="more" href="/2020/04/06/%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BD%95/">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
         <a href="/2019/11/21/%E5%9B%BE%E8%A7%A3%20HTTP%20%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BD%95/">《图解 HTTP》知识点整理</a>
       </h2>
       <p class="article-date">November 21, 2019</p>
@@ -261,11 +247,14 @@ OSI 各个分层的主要作用：
       
       <div class="article-summary">
         
-          Overview一个应用的诞生大致经过以下历程：
+          
+## Overview
+
+一个应用的诞生大致经过以下历程：
 
 (Idea)想法诞生 –&gt; (Prototype)原型设计 –&gt; (App)应用实体 –&gt; (Users)用户使用
 
-你为了解决某个问题而产生想法，设计了应用的基本样式和页面交互等，然后把原型转换成真正的App，最后给用户 ...
+你为了解决某个问题而产生想法，设计了应用的基本样式和页面交互等，然后把原型转换成真正的App ...
         
       </div>
       <a class="more" href="/2019/07/25/WWDC%202019%20Section%20304-%20App%20Distribution%20%E2%80%93%20From%20Ad-hoc%20to%20Enterprise/">Read more</a>
@@ -347,10 +336,41 @@ OSI 各个分层的主要作用：
       
       <div class="article-summary">
         
-          问题描述系统要求：iOS 11.2及之前版本设备要求：无问题详情：因为需要适配小屏幕设备，多个输入框的时候可能需要放在UIScorllView中。当点击其他空白处时候需要隐藏键盘。方法有很多，其中一种做法就是写一个UIScrollView的分类，把Touch事件向后传递，在UITextFie ...
+          
+### 问题描述
+系统要求：iOS 11.2及之前版本
+设备要求：无
+问题详情：因为需要适配小屏幕设备，多个输入框的时候可能需要放在UIScorllView中。当点击其他空白处时候需要隐藏键盘。方法有很多，其中一种做法就是写一个UIScrollView的分类，把Touch事件向后传递，在U ...
         
       </div>
       <a class="more" href="/2019/05/08/iOS%2011%20%E6%89%8B%E5%86%99%E8%BE%93%E5%85%A5%E5%B4%A9%E6%BA%83%20-%5BUIKBBlurredKeyView%20candidateList%5D/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/05/07/PhotoKit%20crash%20--%20This%20application%20is%20not%20allowed%20to%20access%20Photo%20data/">【Crash】 PhotoKit--This application is not allowd to access Photo data</a>
+      </h2>
+      <p class="article-date">May 7, 2019</p>
+      
+        
+  <a href="/tags#Crash" >
+    <span class="tag-code">Crash</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+### 问题描述
+系统要求：无
+设备要求：无
+问题详情：用户禁止应用访问相册，但应用仍然调用了`-[PHImageManager defaultManager]`方法，当应用出现内存警告时，就会崩溃。
+### 崩溃信息
+这个问题的崩溃日志：
+![crash log](https://upl ...
+        
+      </div>
+      <a class="more" href="/2019/05/07/PhotoKit%20crash%20--%20This%20application%20is%20not%20allowed%20to%20access%20Photo%20data/">Read more</a>
     </article>
   
 

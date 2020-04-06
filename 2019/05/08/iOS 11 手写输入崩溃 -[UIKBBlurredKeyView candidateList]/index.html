@@ -127,9 +127,14 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>系统要求：iOS 11.2及之前版本<br>设备要求：无<br>问题详情：因为需要适配小屏幕设备，多个输入框的时候可能需要放在UIScorllView中。当点击其他空白处时候需要隐藏键盘。方法有很多，其中一种做法就是写一个UIScrollView的分类，把Touch事件向后传递，在UITextField所在的界面中重写Touch事件方法关闭键盘。</p>
+    <section class="markdown-content"><meta name="referrer" content="no-referrer">
+### 问题描述
+系统要求：iOS 11.2及之前版本
+设备要求：无
+问题详情：因为需要适配小屏幕设备，多个输入框的时候可能需要放在UIScorllView中。当点击其他空白处时候需要隐藏键盘。方法有很多，其中一种做法就是写一个UIScrollView的分类，把Touch事件向后传递，在UITextField所在的界面中重写Touch事件方法关闭键盘。
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@implementation UIScrollView (Touch)</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">    [[self nextResponder] touchesBegan:touches withEvent:event];</span><br><span class="line">    [super touchesBegan:touches withEvent:event];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>然后用手写输入法写了一个字后，候选词的位置变灰色，一点就崩溃。</p>
+然后用手写输入法写了一个字后，候选词的位置变灰色，一点就崩溃。
+
 <h3 id="崩溃日志"><a href="#崩溃日志" class="headerlink" title="崩溃日志"></a>崩溃日志</h3><p><img src="https://upload-images.jianshu.io/upload_images/4881420-be6dbbc6013d4fda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="crash log1"></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/4881420-beb1736269bb8867.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="crash log2"></p>
 <p>问题关键信息：</p>

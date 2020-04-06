@@ -127,13 +127,18 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h2 id="Swift与OC混编"><a href="#Swift与OC混编" class="headerlink" title="Swift与OC混编"></a>Swift与OC混编</h2><h3 id="Swift工程中调用OC代码"><a href="#Swift工程中调用OC代码" class="headerlink" title="Swift工程中调用OC代码"></a>Swift工程中调用OC代码</h3><p>不需要在Swift中import OC的类，统一在桥接文件中导入需要暴露给Swift的OC类即可在Swift中访问。具体步骤如下：</p>
-<ol>
-<li><p>创建桥接文件：<br>在Swift工程里创建OC文件，创建完成后Xcode会问你是否需要创建桥接文件，点击<code>Create Bridging Header</code>即可创建桥接文件，并设置好了文件路径。<br><img src="https://upload-images.jianshu.io/upload_images/4881420-9c1bc1525c63eee6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="auto create"></p>
-<p> 还可以手动添加桥接文件，首先创建一个<code>.h</code>文件，命名格式为<code>ProductName-Bridging-Header.h</code>，<br><img src="https://upload-images.jianshu.io/upload_images/4881420-e592ae41a35a9fa8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="manual create"></p>
-<p> 其中<code>Product Name</code>一般是工程名，在<code>Build Settings</code>里面可以搜索到。<br><img src="https://upload-images.jianshu.io/upload_images/4881420-d8ce3a226b86c96c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Product Name"></p>
-<p> 创建完桥接文件之后，还需手动添加文件路径配置，在<code>Build Settings</code>-&gt;<code>Objective-C Bridging Header</code>中加入相对路径，路径起始位置就是工程文件的位置，在这里的示例是放在工程目录。<br> <img src="https://upload-images.jianshu.io/upload_images/4881420-669fce21e2eb3834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="path"></p>
-</li>
+    <section class="markdown-content"><meta name="referrer" content="no-referrer">
+## Swift与OC混编
+### Swift工程中调用OC代码
+不需要在Swift中import OC的类，统一在桥接文件中导入需要暴露给Swift的OC类即可在Swift中访问。具体步骤如下：
+1. 创建桥接文件：
+在Swift工程里创建OC文件，创建完成后Xcode会问你是否需要创建桥接文件，点击`Create Bridging Header`即可创建桥接文件，并设置好了文件路径。
+![auto create](https://upload-images.jianshu.io/upload_images/4881420-9c1bc1525c63eee6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+<pre><code>还可以手动添加桥接文件，首先创建一个`.h`文件，命名格式为`ProductName-Bridging-Header.h`，</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/4881420-e592ae41a35a9fa8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="manual create"></p>
+<pre><code>其中`Product Name`一般是工程名，在`Build Settings`里面可以搜索到。</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/4881420-d8ce3a226b86c96c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Product Name"></p>
+<pre><code>创建完桥接文件之后，还需手动添加文件路径配置，在`Build Settings`-&gt;`Objective-C Bridging Header`中加入相对路径，路径起始位置就是工程文件的位置，在这里的示例是放在工程目录。
+![path](https://upload-images.jianshu.io/upload_images/4881420-669fce21e2eb3834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</code></pre><ol start="2">
 <li><p>在桥接文件中导入需要的OC类</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OCTest.h&quot;</span><br></pre></td></tr></table></figure>
 </li>
