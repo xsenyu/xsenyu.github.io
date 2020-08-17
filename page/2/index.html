@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="senyu">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+  
+  <title>
+    
+      Senyu&#39;s blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Senyu's blog" type="application/atom+xml">
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Senyu's blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/05/07/PhotoKit%20crash%20--%20This%20application%20is%20not%20allowed%20to%20access%20Photo%20data/">【Crash】 PhotoKit--This application is not allowd to access Photo data</a>
+      </h2>
+      <p class="article-date">May 7, 2019</p>
+      
+        
+  <a href="/tags#Crash" >
+    <span class="tag-code">Crash</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+问题描述系统要求：无设备要求：无问题详情：用户禁止应用访问相册，但应用仍然调用了-[PHImageManager defaultManager]方法，当应用出现内存警告时，就会崩溃。
+崩溃信息这个问题的崩溃日志：问题关键信息：
+1This application is not allow ...
+        
+      </div>
+      <a class="more" href="/2019/05/07/PhotoKit%20crash%20--%20This%20application%20is%20not%20allowed%20to%20access%20Photo%20data/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/04/28/Swift%E4%B8%8EOC%E6%B7%B7%E7%BC%96/">Swift 与 OC 混编</a>
+      </h2>
+      <p class="article-date">April 28, 2019</p>
+      
+        
+  <a href="/tags#Tips" >
+    <span class="tag-code">Tips</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+Swift与OC混编Swift工程中调用OC代码不需要在Swift中import OC的类，统一在桥接文件中导入需要暴露给Swift的OC类即可在Swift中访问。具体步骤如下：
+
+创建桥接文件：在Swift工程里创建OC文件，创建完成后Xcode会问你是否需要创建桥接文件，点击Crea ...
+        
+      </div>
+      <a class="more" href="/2019/04/28/Swift%E4%B8%8EOC%E6%B7%B7%E7%BC%96/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/03/18/iOS%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E4%B9%8BMVP/">iOS 架构模式之 MVP</a>
+      </h2>
+      <p class="article-date">March 18, 2019</p>
+      
+        
+  <a href="/tags#Technology" >
+    <span class="tag-code">Technology</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+### 前言
+
+软件开发中，最常见的设计模式是Model-View-Controller(MVC)，MVC也是构建Cocoa应用程序的标准模板，MVC设计模式为应用程序中的对象分配三个角色之一：模型，视图或控制器。采用这种模式的好处很多，这些应用程序中的许多对象往往更具可重用性，比其他应用 ...
+        
+      </div>
+      <a class="more" href="/2019/03/18/iOS%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E4%B9%8BMVP/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a class="unvisible" href="/">Next <span class="page-arrow">→</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Posted by <a href="">senyu</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

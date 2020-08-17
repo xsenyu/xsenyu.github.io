@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="senyu">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+  
+  <title>
+    
+      App Clips 概览 | Senyu&#39;s blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Senyu's blog" type="application/atom+xml">
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Senyu's blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>App Clips 概览</h2>
+  <p class="post-date">2020-06-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>苹果在 WWDC 2020 发布了 App Clips，让没有安装应用的用户也能够体验到你的应用的部分功能，这与现有的微信、支付宝小程序在设计理念上非常类似，不过在设计上也是稍微有其独特之处。另外从技术层面上看，App Clips 依托的是原生平台，因此使用的技术也是完全不同的，本文主要针对 App Clips 的特点和设计进行介绍。</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>App Clips 是一个轻量级版本的应用，主要目的是让用户无论在何时何地都可以根据不同场景使用到其中对应部分的功能。但和小程序不同的是，他不是一个独立应用程序，App Clips 的使用需要依托特定的场景，而且一次打开只能体验到其中一部分的功能。比如说一个咖啡店的应用，可能会包含点单、收藏饮品、获取优惠券等不同功能，然而一个咖啡店的 App Clip 只应该包含点单的功能。对这个场景苹果提出一种设想：用户想买咖啡，当他走到咖啡店附近时，系统根据定位信息弹出一个关于这家店 Siri 建议，那么用户点击建议就可以打开这家咖啡店的 App Clip，然后可以直接在上面下单买咖啡，这样用户不用下载咖啡店的 App 也可以快速便捷地买到咖啡。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-ee2fb65e237ae935?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="App-Clip-Experience"><a href="#App-Clip-Experience" class="headerlink" title="App Clip Experience"></a>App Clip Experience</h2><p>可以看到，<code>App Clips</code> 的使用需要依托特定的场景，由用户去触发这些场景的条件（Invocation），从而打开 <code>App Clips</code> 提供特定服务。打开 <code>App Clips</code> 借助的是一个 URL，苹果将其定义为 <code>App Clip Experience</code>，这类 URL 会由系统通过如 <code>App Clip Card</code>这样的形式呈现给用户，用户点击 Open 时系统就会打开 App 或者下载对应 <code>App Clips</code> 进行处理。可以理解成 App 的新的入口，和之前推出的 <code>Universal Link</code> 的处理过程比较类似，关键区别是不需要使用 <code>Apple app site assionciations</code> 文件，而可以直接在 <code>App Store Connect</code> 上注册。这些 URL 本身也是字符串，因此可以编码成物理标签，如：</p>
+<ul>
+<li><p>NFC 标签</p>
+</li>
+<li><p>二维码</p>
+</li>
+<li><p>地图店铺标签</p>
+</li>
+<li><p>附近建议（如上面的咖啡店案例，可以在 <code>App Store Connect</code> 上注册）</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-17a9508d7e61b7fb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<ul>
+<li>Safari（网页顶部 banner）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-5cdf72a88161c3b0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<ul>
+<li>短信链接</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-51be4e008b4bf9ee?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>另外，为了更方便的使用 <code>App Clips</code>，苹果结合了 NFC 和二维码的优点设计了 <code>App Clip Code</code> ，让用户一看就知道这是一个 App Clip。与微信小程序码不同，他可以支持触碰和扫描。关于 <code>App Clip Code</code> 的生成工具，苹果会在今年内推出。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-d475c2cdb6f3dd8c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="App-Clips"><a href="#App-Clips" class="headerlink" title="App Clips"></a>App Clips</h2><p>用户打开 <code>App Clip Experience</code>时，如果已经安装了 App，那么就会打开 App 来处理，如果没有安装，系统会下载对应的 <code>App Clips</code> 来执行本次处理需要的功能。<code>App Clips</code> 与普通 App 很相似，但<code>App Clips</code> 只需要包含应用的核心功能，用于处理 <code>App Clip Experiences</code> 即可。</p>
+<p>从开发层面看，<code>App Clips</code> 依托的是原生的环境，可以使用的和 App 一样的 UI 框架，也就是说可以直接使用 <code>UIKit</code> 或者 <code>SwiftUI</code>，另外 iOS SDK 中多数框架也是可以共用的，因此绝大多数代码可以直接与 App 共用一份，在审核时，<code>App Clips</code> 只需要单独编译打包，然后和 App 一起提交即可，这比重头开发一个小程序的成本低很多。</p>
+<p>在用户设备上，<code>App Clips</code> 是由系统单独下载，与 App 相互独立，用户通过 <code>App Clip Experiences</code>启动应用的时候，App 或者 <code>App Clip</code> 会收到一个 <code>NSUserActivity</code>，用于处理不同的功能请求，类似 Universal links，因此针对不同功能可以设置不同的  <code>App Clip Experiences</code> 来作为入口。</p>
+<p>虽然 <code>App Clips</code>可以共用 iOS 的系统库，但是相比原生 App 还是有一些限制：</p>
+<ul>
+<li>不支持的 framework 包括：<a href="https://developer.apple.com/documentation/callkit" target="_blank" rel="noopener">CallKit</a>, <a href="https://developer.apple.com/documentation/carekit" target="_blank" rel="noopener">CareKit</a>, <a href="https://developer.apple.com/documentation/cloudkit" target="_blank" rel="noopener">CloudKit</a>, <a href="https://developer.apple.com/documentation/healthkit" target="_blank" rel="noopener">HealthKit</a>, <a href="https://developer.apple.com/documentation/homekit" target="_blank" rel="noopener">HomeKit</a>, <a href="http://researchkit.org/" target="_blank" rel="noopener">ResearchKit</a>, <a href="https://developer.apple.com/documentation/sensorkit" target="_blank" rel="noopener">SensorKit</a>, <a href="https://developer.apple.com/documentation/speech" target="_blank" rel="noopener">Speech</a>；</li>
+<li>瘦身之后，包大小不能超过 <strong>10 MB</strong>，苹果建议多数资源可以直接下载，Assets 里只保留必须的资源文件即可；</li>
+<li>不允许使用敏感用户数据，<code>App Clip</code> 中获取敏感数据会一直返回未授权，包括以下数据：<ul>
+<li>运动和健身数据</li>
+<li>Apple Music 和多媒体文件</li>
+<li>通讯录、信息、照片、文件等数据</li>
+</ul>
+</li>
+<li>为了保护用户隐私，<code>App Clip</code>不允许要求授权定位追踪，不过可以请求 <code>When In Use authorization</code> 权限，第二天 04:00 会自动重置权限；</li>
+<li>为了简化操作，苹果也提供了免申请的通知和定位功能，8 小时内有效，且定位只能用于判断是否在某个区域，只能请求一次；</li>
+</ul>
+<h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><p>一般来说设计一个 App 时，我们会在顶层的控制器放置所有功能的入口，比如设置 tab bar 来切换不同页面。 <code>App Clips</code> 可以包含很多功能，但是不需要像 App 一样放置所有功能的入口，不同功能是通过 <code>App Clip Experience</code> 的 URL 作为入口，一次只需要使用其中之一，因此 <code>App Clips</code> 整个交互的流程是一个流线型、线性的过程。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-61ba72f85d169c33?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p><code>App Clips</code> 用户交互的一个大致的流程：</p>
+<ol>
+<li>用户通过扫描二维码等方式打开一个 <code>App Clip Experience</code> ；</li>
+<li>因为设备中没有对应的 App，系统会下载并启动对应的 App Clip，用户可以使用指定功能；</li>
+<li>然后会有三种场景：<ol>
+<li>一段时间后，用户一直没有启动过 <code>App Clip</code>，那么系统会删除 <code>App Clip</code> 和数据；</li>
+<li>用户一直在频繁的使用 App Clip，系统会延长其存活的时间，甚至不会删除；</li>
+<li>用户直接下载了你的 App；</li>
+</ol>
+</li>
+</ol>
+<p>当用户使用过 <code>App Clips</code>后下载了你的 App，系统会直接将相机、蓝牙和麦克风权限迁移到你的 App。如果 <code>App Clips</code> 中需要迁移的数据，可以将数据放到一个共享的 <code>App Group Container</code> 进行数据迁移。然后系统会删掉 App Clip 本身。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4881420-0d79e34f9f0dc9f6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>另外关于 <code>App Clips</code> 中使用到的用户数据还需要注意：</p>
+<ol>
+<li>当用户一段时间没有使用 <code>App Clips</code>，其内容本身、用户数据、keychain 数据都会被删除；</li>
+<li><code>App Clips</code> 不包含在 iOS 备份中；</li>
+<li>不允许访问用户敏感数据，比如健康和健身数据，如果要访问，提示用户安装应用；</li>
+<li><code>Universal Links</code>、支持打开的文档类型、URL scheme 等在 <code>App Clips</code> 中都是不可用的，因此作为登录回调是不支持的，登录功能需要使用 <code>ASWebAuthenticationSession</code>；</li>
+<li>不能包括 bundled extensions，比如 content blockers；</li>
+</ol>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><code>App Clips</code> 的作用是在用户未安装应用时，根据用户需求快速呈现应用中的功能，借用苹果的原话:</p>
+<blockquote>
+<p>App Clips are designed for speed.</p>
+</blockquote>
+<p><code>App Clips</code> 的应用体验是一个流线型、快捷、目标明确、即时体验的过程，从其特性上看，<code>App Clips</code>也适用于实体店、线下活动等线下应用场景，可以提供不错的用户体验。另外对于现有的 App 来说，开发者可以很轻松的将功能迁移到 <code>App Clips</code>上，相信正式推出后会得到广泛的应用。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#WWDC" >
+    <span class="tag-code">WWDC</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/11/21/%E5%9B%BE%E8%A7%A3%20HTTP%20%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BD%95/">
+        <span class="nav-arrow">← </span>
+        
+          《图解 HTTP》知识点整理
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://xsenyu.github.io/2020/06/29/App Clips 概览/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2020 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Posted by <a href="">senyu</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>
